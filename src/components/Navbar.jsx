@@ -24,150 +24,146 @@ export default function Navbar() {
   };
 
   return (
-    <nav style={{ background: "#fff", borderBottom: "1px solid #e2e8f0", position: "sticky", top: 0, zIndex: 50, width: "100%" }}>
+    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50 w-full">
 
-      
-      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 40px", height: "64px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+     
+      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
 
         
-        <NavLink to="/" style={{ fontSize: "22px", fontWeight: "800", color: "#4f46e5", textDecoration: "none" }}>
+        <NavLink to="/" className="text-2xl font-extrabold text-indigo-600 no-underline">
           Nexkart
         </NavLink>
 
        
-        <div style={{ display: "flex", alignItems: "center", gap: "28px" }}>
+        <div className="hidden md:flex items-center gap-7">
 
-          <NavLink to="/"
-            style={({ isActive }) => ({
-              fontSize: "15px",
-              fontWeight: "500",
-              color: isActive ? "#4f46e5" : "#6b7280",
-              textDecoration: "none",
-              paddingBottom: "2px",
-              borderBottom: isActive ? "2px solid #4f46e5" : "2px solid transparent",
-            })}
-          >
+          <NavLink to="/" className={({ isActive }) =>
+            `text-[15px] font-medium no-underline pb-1 transition-all ${isActive
+              ? "text-indigo-600 border-b-2 border-indigo-600"
+              : "text-gray-500 border-b-2 border-transparent hover:text-indigo-600"
+            }`
+          }>
             Home
           </NavLink>
 
-          <NavLink to="/products"
-            style={({ isActive }) => ({
-              fontSize: "15px",
-              fontWeight: "500",
-              color: isActive ? "#4f46e5" : "#6b7280",
-              textDecoration: "none",
-              paddingBottom: "2px",
-              borderBottom: isActive ? "2px solid #4f46e5" : "2px solid transparent",
-            })}
-          >
+          <NavLink to="/products" className={({ isActive }) =>
+            `text-[15px] font-medium no-underline pb-1 transition-all ${isActive
+              ? "text-indigo-600 border-b-2 border-indigo-600"
+              : "text-gray-500 border-b-2 border-transparent hover:text-indigo-600"
+            }`
+          }>
             Products
           </NavLink>
 
           {user && (
             <>
-              
-              <NavLink to="/wishlist" style={{ position: "relative", color: "#6b7280", textDecoration: "none" }}>
+             
+              <NavLink to="/wishlist" className="relative text-gray-500 hover:text-red-500 transition-colors no-underline">
                 <FaHeart size={20} />
                 {wishlistItems.length > 0 && (
-                  <span style={{ position: "absolute", top: "-8px", right: "-8px", background: "#ef4444", color: "#fff", fontSize: "10px", width: "16px", height: "16px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "700" }}>
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-4.25 h-4.25 rounded-full flex items-center justify-center font-bold">
                     {wishlistItems.length}
                   </span>
                 )}
               </NavLink>
 
              
-              <NavLink to="/cart" style={{ position: "relative", color: "#6b7280", textDecoration: "none" }}>
+              <NavLink to="/cart" className="relative text-gray-500 hover:text-indigo-600 transition-colors no-underline">
                 <FaShoppingCart size={20} />
                 {cartCount > 0 && (
-                  <span style={{ position: "absolute", top: "-8px", right: "-8px", background: "#4f46e5", color: "#fff", fontSize: "10px", width: "16px", height: "16px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "700" }}>
+                  <span className="absolute -top-2 -right-2 bg-indigo-600 text-white text-[10px] w-4.25 h-4.25 rounded-full flex items-center justify-center font-bold">
                     {cartCount}
                   </span>
                 )}
               </NavLink>
 
              
-              <span style={{ fontSize: "14px", fontWeight: "500", color: "#374151", background: "#f3f4f6", padding: "6px 12px", borderRadius: "8px" }}>
+              <span className="text-[14px] font-medium text-gray-700 bg-gray-100 px-3 py-1.5 rounded-lg">
                 👤 {JSON.parse(localStorage.getItem("loggedInUser") || "{}")?.name || "User"}
               </span>
 
-             
-              <button
-                onClick={logout}
-                style={{ fontSize: "14px", fontWeight: "600", color: "#ef4444", background: "#fef2f2", border: "1px solid #fecaca", padding: "8px 16px", borderRadius: "10px", cursor: "pointer" }}
-              >
+            
+              <button onClick={logout}
+                className="text-[14px] font-semibold text-red-500 bg-red-50 border border-red-200 px-4 py-2 rounded-xl hover:bg-red-100 transition cursor-pointer">
                 Logout
               </button>
             </>
           )}
 
           {!user && (
-            <NavLink
-              to="/login"
-              style={{ fontSize: "14px", fontWeight: "600", color: "#fff", background: "#4f46e5", padding: "8px 20px", borderRadius: "10px", textDecoration: "none" }}
-            >
+            <NavLink to="/login"
+              className="text-[14px] font-semibold text-white bg-indigo-600 hover:bg-indigo-700 px-5 py-2 rounded-xl no-underline transition">
               Login
             </NavLink>
           )}
         </div>
 
+       
+        <div className="flex md:hidden items-center gap-4">
+          {user && (
+            <NavLink to="/cart" className="relative text-gray-500 no-underline">
+              <FaShoppingCart size={22} />
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-indigo-600 text-white text-[10px] w-4.25 h-4.25 rounded-full flex items-center justify-center font-bold">
+                  {cartCount}
+                </span>
+              )}
+            </NavLink>
+          )}
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="text-gray-600 bg-transparent border-none cursor-pointer p-1"
+          >
+            {menuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+          </button>
+        </div>
+
       </div>
 
-      
+     
       {menuOpen && (
-        <div style={{ display: "flex", flexDirection: "column", gap: "4px", padding: "12px 16px 16px", borderTop: "1px solid #f1f5f9", background: "#fff" }}>
+        <div className="md:hidden flex flex-col gap-1 px-4 pb-4 pt-2 border-t border-gray-100 bg-white">
 
-          <NavLink to="/"
-            style={({ isActive }) => ({
-              fontSize: "15px", fontWeight: "500", padding: "10px 12px", borderRadius: "10px", textDecoration: "none", color: isActive ? "#4f46e5" : "#374151", background: isActive ? "#eef2ff" : "transparent"
-            })}
-          >
+          <NavLink to="/" className={({ isActive }) =>
+            `text-[15px] font-medium px-3 py-2.5 rounded-xl no-underline transition ${isActive ? "text-indigo-600 bg-indigo-50" : "text-gray-600 hover:bg-gray-50"}`
+          }>
             🏠 Home
           </NavLink>
 
-          <NavLink to="/products"
-            style={({ isActive }) => ({
-              fontSize: "15px", fontWeight: "500", padding: "10px 12px", borderRadius: "10px", textDecoration: "none", color: isActive ? "#4f46e5" : "#374151", background: isActive ? "#eef2ff" : "transparent"
-            })}
-          >
+          <NavLink to="/products" className={({ isActive }) =>
+            `text-[15px] font-medium px-3 py-2.5 rounded-xl no-underline transition ${isActive ? "text-indigo-600 bg-indigo-50" : "text-gray-600 hover:bg-gray-50"}`
+          }>
             🛍️ Products
           </NavLink>
 
           {user && (
             <>
-              <NavLink to="/wishlist"
-                style={({ isActive }) => ({
-                  fontSize: "15px", fontWeight: "500", padding: "10px 12px", borderRadius: "10px", textDecoration: "none", color: isActive ? "#ef4444" : "#374151", background: isActive ? "#fef2f2" : "transparent"
-                })}
-              >
+              <NavLink to="/wishlist" className={({ isActive }) =>
+                `text-[15px] font-medium px-3 py-2.5 rounded-xl no-underline transition ${isActive ? "text-red-500 bg-red-50" : "text-gray-600 hover:bg-gray-50"}`
+              }>
                 ❤️ Wishlist {wishlistItems.length > 0 && `(${wishlistItems.length})`}
               </NavLink>
 
-              <NavLink to="/cart"
-                style={({ isActive }) => ({
-                  fontSize: "15px", fontWeight: "500", padding: "10px 12px", borderRadius: "10px", textDecoration: "none", color: isActive ? "#4f46e5" : "#374151", background: isActive ? "#eef2ff" : "transparent"
-                })}
-              >
+              <NavLink to="/cart" className={({ isActive }) =>
+                `text-[15px] font-medium px-3 py-2.5 rounded-xl no-underline transition ${isActive ? "text-indigo-600 bg-indigo-50" : "text-gray-600 hover:bg-gray-50"}`
+              }>
                 🛒 Cart {cartCount > 0 && `(${cartCount})`}
               </NavLink>
 
-              <div style={{ fontSize: "14px", color: "#6b7280", padding: "10px 12px", background: "#f9fafb", borderRadius: "10px" }}>
+              <div className="text-[14px] text-gray-500 px-3 py-2.5 bg-gray-50 rounded-xl">
                 👤 {JSON.parse(localStorage.getItem("loggedInUser") || "{}")?.name || "User"}
               </div>
 
-              <button
-                onClick={logout}
-                style={{ fontSize: "14px", fontWeight: "600", color: "#ef4444", background: "#fef2f2", border: "1px solid #fecaca", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", textAlign: "left" }}
-              >
+              <button onClick={logout}
+                className="text-[14px] font-semibold text-red-500 bg-red-50 border border-red-200 px-3 py-2.5 rounded-xl text-left hover:bg-red-100 transition cursor-pointer">
                 🚪 Logout
               </button>
             </>
           )}
 
           {!user && (
-            <NavLink
-              to="/login"
-              style={{ fontSize: "15px", fontWeight: "600", color: "#fff", background: "#4f46e5", padding: "10px 12px", borderRadius: "10px", textDecoration: "none", textAlign: "center" }}
-            >
+            <NavLink to="/login"
+              className="text-[15px] font-semibold text-white bg-indigo-600 px-3 py-2.5 rounded-xl text-center no-underline hover:bg-indigo-700 transition">
               🔐 Login
             </NavLink>
           )}
