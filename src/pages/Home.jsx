@@ -17,7 +17,7 @@ export default function Home() {
             color: "white", fontSize: "13px", fontWeight: "500",
             padding: "6px 16px", borderRadius: "20px", marginBottom: "24px"
           }}>
-            🛍️ India's Fastest Growing Store
+            🛍️ India's Fastest Growing Storessssss
           </div>
 
           <h1 style={{
