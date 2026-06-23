@@ -1,7 +1,7 @@
 # 🛒 NexKart — Ecommerce Application
 
 🔗 **Live Demo:**
-https://nexkart-ecommerce.netlify.app
+https://nexkart-ecommerce-app.vercel.app
 
 ---
 
