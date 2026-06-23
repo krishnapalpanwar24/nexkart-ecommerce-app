@@ -35,76 +35,72 @@ export default function Navbar() {
 
   const userName = JSON.parse(localStorage.getItem("loggedInUser") || "{}")?.name || "User";
 
-  const navStyle = {
-    background: "white",
-    borderBottom: "1px solid #e5e7eb",
-    position: "sticky",
-    top: 0,
-    zIndex: 50,
-    width: "100%",
-    boxSizing: "border-box",
-  };
-
-  const rowStyle = {
-    maxWidth: "1280px",
-    margin: "0 auto",
-    padding: "0 24px",
-    height: "64px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    boxSizing: "border-box",
-  };
-
-  const linkStyle = (isActive) => ({
-    fontSize: "15px",
-    fontWeight: "500",
-    textDecoration: "none",
-    paddingBottom: "2px",
-    color: isActive ? "#4f46e5" : "#6b7280",
-    borderBottom: isActive ? "2px solid #4f46e5" : "2px solid transparent",
-  });
-
   const badgeStyle = (bg) => ({
-    position: "absolute",
-    top: "-8px", right: "-8px",
-    background: bg,
-    color: "white",
-    fontSize: "10px",
-    width: "17px", height: "17px",
-    borderRadius: "50%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    position: "absolute", top: "-8px", right: "-8px",
+    background: bg, color: "white", fontSize: "10px",
+    width: "17px", height: "17px", borderRadius: "50%",
+    display: "flex", alignItems: "center", justifyContent: "center",
     fontWeight: "700",
   });
 
   const mobileLinkStyle = (isActive, activeColor = "#4f46e5", activeBg = "#eef2ff") => ({
-    fontSize: "15px",
-    fontWeight: "500",
-    padding: "10px 12px",
-    borderRadius: "10px",
-    textDecoration: "none",
-    display: "block",
+    fontSize: "15px", fontWeight: "500", padding: "10px 12px",
+    borderRadius: "10px", textDecoration: "none", display: "block",
     color: isActive ? activeColor : "#374151",
     background: isActive ? activeBg : "transparent",
   });
 
   return (
-    <nav style={navStyle}>
+    <>
+     
+      <style>{`
+        .nav-desktop { display: flex; align-items: center; gap: 28px; }
+        .nav-mobile { display: none; align-items: center; gap: 16px; }
+        .nav-mobile-menu { display: none; flex-direction: column; gap: 4px; padding: 12px 16px 16px; border-top: 1px solid #f1f5f9; background: white; }
+        .nav-mobile-menu.open { display: flex; }
+        @media (max-width: 768px) {
+          .nav-desktop { display: none !important; }
+          .nav-mobile { display: flex !important; }
+        }
+      `}</style>
 
-      <div style={rowStyle}>
+      <nav style={{
+        background: "white", borderBottom: "1px solid #e5e7eb",
+        position: "sticky", top: 0, zIndex: 50, width: "100%",
+      }}>
 
-        {/* Logo */}
-        <NavLink to="/" style={{ fontSize: "22px", fontWeight: "800", color: "#4f46e5", textDecoration: "none" }}>
-          Nexkart
-        </NavLink>
+       
+        <div style={{
+          maxWidth: "1280px", margin: "0 auto", padding: "0 24px",
+          height: "64px", display: "flex", alignItems: "center",
+          justifyContent: "space-between", boxSizing: "border-box",
+        }}>
 
-        {/* Desktop */}
-        {!isMobile && (
-          <div style={{ display: "flex", alignItems: "center", gap: "28px" }}>
-            <NavLink to="/" style={({ isActive }) => linkStyle(isActive)}>Home</NavLink>
-            <NavLink to="/products" style={({ isActive }) => linkStyle(isActive)}>Products</NavLink>
+         
+          <NavLink to="/" style={{
+            fontSize: "22px", fontWeight: "800",
+            color: "#4f46e5", textDecoration: "none",
+          }}>
+            Nexkart
+          </NavLink>
+
+          
+          <div className="nav-desktop">
+            <NavLink to="/" style={({ isActive }) => ({
+              fontSize: "15px", fontWeight: "500", textDecoration: "none",
+              paddingBottom: "2px", color: isActive ? "#4f46e5" : "#6b7280",
+              borderBottom: isActive ? "2px solid #4f46e5" : "2px solid transparent",
+            })}>
+              Home
+            </NavLink>
+
+            <NavLink to="/products" style={({ isActive }) => ({
+              fontSize: "15px", fontWeight: "500", textDecoration: "none",
+              paddingBottom: "2px", color: isActive ? "#4f46e5" : "#6b7280",
+              borderBottom: isActive ? "2px solid #4f46e5" : "2px solid transparent",
+            })}>
+              Products
+            </NavLink>
 
             {user && (
               <>
@@ -122,27 +118,36 @@ export default function Navbar() {
                   )}
                 </NavLink>
 
-                <span style={{ fontSize: "14px", fontWeight: "500", color: "#374151", background: "#f3f4f6", padding: "6px 12px", borderRadius: "8px" }}>
+                <span style={{
+                  fontSize: "14px", fontWeight: "500", color: "#374151",
+                  background: "#f3f4f6", padding: "6px 12px", borderRadius: "8px",
+                }}>
                   👤 {userName}
                 </span>
 
-                <button onClick={logout} style={{ fontSize: "14px", fontWeight: "600", color: "#ef4444", background: "#fef2f2", border: "1px solid #fecaca", padding: "8px 16px", borderRadius: "10px", cursor: "pointer" }}>
+                <button onClick={logout} style={{
+                  fontSize: "14px", fontWeight: "600", color: "#ef4444",
+                  background: "#fef2f2", border: "1px solid #fecaca",
+                  padding: "8px 16px", borderRadius: "10px", cursor: "pointer",
+                }}>
                   Logout
                 </button>
               </>
             )}
 
             {!user && (
-              <NavLink to="/login" style={{ fontSize: "14px", fontWeight: "600", color: "white", background: "#4f46e5", padding: "8px 20px", borderRadius: "10px", textDecoration: "none" }}>
+              <NavLink to="/login" style={{
+                fontSize: "14px", fontWeight: "600", color: "white",
+                background: "#4f46e5", padding: "8px 20px",
+                borderRadius: "10px", textDecoration: "none",
+              }}>
                 Login
               </NavLink>
             )}
           </div>
-        )}
 
-        {/* Mobile — Hamburger */}
-        {isMobile && (
-          <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+         
+          <div className="nav-mobile">
             {user && (
               <NavLink to="/cart" style={{ position: "relative", color: "#6b7280", textDecoration: "none" }}>
                 <FaShoppingCart size={22} />
@@ -153,21 +158,28 @@ export default function Navbar() {
             )}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              style={{ background: "none", border: "none", cursor: "pointer", color: "#374151", padding: "4px", display: "flex", alignItems: "center" }}
+              style={{
+                background: "none", border: "none", cursor: "pointer",
+                color: "#374151", padding: "4px",
+                display: "flex", alignItems: "center",
+              }}
             >
               {menuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
             </button>
           </div>
-        )}
 
-      </div>
+        </div>
 
-      {/* Mobile Menu */}
-      {isMobile && menuOpen && (
-        <div style={{ display: "flex", flexDirection: "column", gap: "4px", padding: "12px 16px 16px", borderTop: "1px solid #f1f5f9", background: "white" }}>
+       
+        <div className={`nav-mobile-menu ${menuOpen ? "open" : ""}`}>
 
-          <NavLink to="/" style={({ isActive }) => mobileLinkStyle(isActive)}>🏠 Home</NavLink>
-          <NavLink to="/products" style={({ isActive }) => mobileLinkStyle(isActive)}>🛍️ Products</NavLink>
+          <NavLink to="/" style={({ isActive }) => mobileLinkStyle(isActive)}>
+             Home
+          </NavLink>
+
+          <NavLink to="/products" style={({ isActive }) => mobileLinkStyle(isActive)}>
+             Products
+          </NavLink>
 
           {user && (
             <>
@@ -179,24 +191,37 @@ export default function Navbar() {
                 🛒 Cart {cartCount > 0 && `(${cartCount})`}
               </NavLink>
 
-              <div style={{ fontSize: "14px", color: "#6b7280", padding: "10px 12px", background: "#f9fafb", borderRadius: "10px" }}>
+              <div style={{
+                fontSize: "14px", color: "#6b7280", padding: "10px 12px",
+                background: "#f9fafb", borderRadius: "10px",
+              }}>
                 👤 {userName}
               </div>
 
-              <button onClick={logout} style={{ fontSize: "14px", fontWeight: "600", color: "#ef4444", background: "#fef2f2", border: "1px solid #fecaca", padding: "10px 12px", borderRadius: "10px", cursor: "pointer", textAlign: "left" }}>
-                🚪 Logout
+              <button onClick={logout} style={{
+                fontSize: "14px", fontWeight: "600", color: "#ef4444",
+                background: "#fef2f2", border: "1px solid #fecaca",
+                padding: "10px 12px", borderRadius: "10px",
+                cursor: "pointer", textAlign: "left",
+              }}>
+                 Logout
               </button>
             </>
           )}
 
           {!user && (
-            <NavLink to="/login" style={{ fontSize: "15px", fontWeight: "600", color: "white", background: "#4f46e5", padding: "10px 12px", borderRadius: "10px", textDecoration: "none", textAlign: "center", display: "block" }}>
+            <NavLink to="/login" style={{
+              fontSize: "15px", fontWeight: "600", color: "white",
+              background: "#4f46e5", padding: "10px 12px",
+              borderRadius: "10px", textDecoration: "none",
+              textAlign: "center", display: "block",
+            }}>
               🔐 Login
             </NavLink>
           )}
         </div>
-      )}
 
-    </nav>
+      </nav>
+    </>
   );
 }
