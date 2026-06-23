@@ -21,7 +21,7 @@ export default function AdminSidebar() {
 
   return (
     <>
-      
+
       <div className="md:hidden bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
         <h2 style={{ color: "#4f46e5", fontWeight: "800", fontSize: "18px" }}>
           Nexkart Admin
@@ -31,7 +31,7 @@ export default function AdminSidebar() {
         </button>
       </div>
 
-      
+
       {menuOpen && (
         <div className="md:hidden bg-white border-b border-gray-200 px-4 py-3 flex flex-col gap-2">
           {links.map(({ to, label, icon, end }) => (
@@ -41,8 +41,7 @@ export default function AdminSidebar() {
               end={end}
               onClick={() => setMenuOpen(false)}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition ${
-                  isActive ? "bg-indigo-600 text-white" : "text-gray-600 hover:bg-gray-50"
+                `flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition ${isActive ? "bg-indigo-600 text-white" : "text-gray-600 hover:bg-gray-50"
                 }`
               }
             >
@@ -58,20 +57,17 @@ export default function AdminSidebar() {
         </div>
       )}
 
-      
+
       <div
-        className="hidden md:flex flex-col p-5"
+        className="hidden md:flex flex-col p-5 md:w-60"
         style={{
           background: "#1e1b4b",
-          height: "100vh",
-          position: "sticky",
-          top: 0,
+          minHeight: "100vh",
           overflowY: "auto",
           flexShrink: 0,
-          width: "240px",
         }}
       >
-       
+
         <div style={{ margin: "25px", marginBottom: "32px", paddingBottom: "20px", borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
           <h2 style={{ color: "#fff", fontWeight: "800", fontSize: "30px" }}>
             Nexkart
@@ -81,7 +77,7 @@ export default function AdminSidebar() {
           </p>
         </div>
 
-       
+
         <nav style={{ display: "flex", flexDirection: "column", gap: "6px", flex: 1 }}>
           {links.map(({ to, label, icon, end }) => (
             <NavLink
@@ -107,7 +103,7 @@ export default function AdminSidebar() {
           ))}
         </nav>
 
-       
+
         <button
           onClick={logout}
           style={{
