@@ -84,7 +84,7 @@ export default function AllProducts() {
       
       {filtered.length === 0 ? (
         <div style={{ textAlign: "center", padding: "60px", background: "#fff", borderRadius: "16px", border: "1px solid #e2e8f0" }}>
-          <p style={{ color: "#94a3b8", fontSize: "16px" }}>No products found 😕</p>
+          <p style={{ color: "#94a3b8", fontSize: "16px" }}>No products found</p>
         </div>
       ) : (
         <div style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: "16px", overflow: "hidden", boxShadow: "0 1px 3px rgba(0,0,0,0.08)" }}>
