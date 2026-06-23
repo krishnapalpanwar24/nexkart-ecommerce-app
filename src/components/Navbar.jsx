@@ -220,7 +220,6 @@ export default function Navbar() {
             </NavLink>
           )}
         </div>
-
       </nav>
     </>
   );
