@@ -23,7 +23,7 @@ export default function Cart() {
         createdAt: new Date().toISOString(),
       });
       clearCart();
-      alert("Order placed successfully! 🎉");
+      alert("Order placed successfully!");
       nav("/products");
     } catch (err) {
       alert(err.message);
