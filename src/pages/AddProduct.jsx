@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "../firebase";
 import { FaPlus, FaImage } from "react-icons/fa";
 
 const CATEGORIES = [
@@ -24,19 +26,52 @@ export default function AddProduct() {
     description: "",
     image: "",
   });
+
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploading(true);
+
+    try {
+      const storageRef = ref(storage, `products/${file.name}`);
+
+      await uploadBytes(storageRef, file);
+
+      const url = await getDownloadURL(storageRef);
+
+      setForm((prev) => ({
+        ...prev,
+        image: url,
+      }));
+    } catch (err) {
+      alert(err.message);
+    }
+
+    setUploading(false);
+  };
+
   const submit = async (e) => {
     e.preventDefault();
+
     if (!form.name || !form.price || !form.stock || !form.category) {
       return alert("Please fill all required fields");
     }
 
+    if (uploading) {
+      return alert("Image is still uploading...");
+    }
+
     setLoading(true);
+
     try {
       await addDoc(collection(db, "products"), {
         name: form.name,
@@ -48,11 +83,20 @@ export default function AddProduct() {
         createdAt: new Date().toISOString(),
       });
 
-      alert("Product added successfully! ✅");
-      setForm({ name: "", price: "", stock: "", category: "", description: "", image: "" });
+      alert("Product added successfully!");
+
+      setForm({
+        name: "",
+        price: "",
+        stock: "",
+        category: "",
+        description: "",
+        image: "",
+      });
     } catch (err) {
       alert(err.message);
     }
+
     setLoading(false);
   };
 
@@ -62,7 +106,6 @@ export default function AddProduct() {
     borderRadius: "12px",
     padding: "14px 16px",
     fontSize: "15px",
-    color: "#0f172a",
     background: "#f8fafc",
     outline: "none",
   };
@@ -70,166 +113,136 @@ export default function AddProduct() {
   const labelStyle = {
     fontSize: "15px",
     fontWeight: "700",
-    color: "#0f172a",
-    display: "block",
     marginBottom: "8px",
+    display: "block",
   };
 
   return (
     <div className="w-full pb-10 pr-6">
 
-      
-      <div className="mb-6">
-        <h1 style={{ fontSize: "26px", fontWeight: "800", color: "#0f172a" }}>
-          Add New Product
-        </h1>
-       
-      </div>
+      <h1 style={{ fontSize: "26px", fontWeight: "800" }}>
+        Add New Product
+      </h1>
 
-      <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+      <form
+        onSubmit={submit}
+        style={{ display: "flex", flexDirection: "column", gap: "20px", marginTop: "20px" }}
+      >
 
        
-        <div style={{ background: "#4f46e5", padding: "16px 24px" }}>
-          <h2 style={{ color: "#fff", fontSize: "16px", fontWeight: "700" }}>
-            Product Details
-          </h2>
+        <div>
+          <label style={labelStyle}>Product Name *</label>
+          <input
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+            style={inputStyle}
+          />
         </div>
 
-        <form onSubmit={submit} style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "20px" }}>
-
-          
+       
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
           <div>
-            <label style={labelStyle}>
-              Product Name <span style={{ color: "#ef4444" }}>*</span>
-            </label>
+            <label style={labelStyle}>Price *</label>
             <input
-              name="name"
-              value={form.name}
+              type="number"
+              name="price"
+              value={form.price}
               onChange={handleChange}
-              placeholder="Enter product name"
               style={inputStyle}
             />
           </div>
 
-          
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
-            <div>
-              <label style={labelStyle}>
-                Price (₹) <span style={{ color: "#ef4444" }}>*</span>
-              </label>
-              <input
-                name="price"
-                type="number"
-                value={form.price}
-                onChange={handleChange}
-                placeholder="e.g. 499"
-                style={inputStyle}
-              />
-            </div>
-            <div>
-              <label style={labelStyle}>
-                Stock <span style={{ color: "#ef4444" }}>*</span>
-              </label>
-              <input
-                name="stock"
-                type="number"
-                value={form.stock}
-                onChange={handleChange}
-                placeholder="e.g. 10"
-                style={inputStyle}
-              />
-            </div>
-          </div>
-
-        
           <div>
-            <label style={labelStyle}>
-              Category <span style={{ color: "#ef4444" }}>*</span>
-            </label>
-            <select
-              name="category"
-              value={form.category}
-              onChange={handleChange}
-              style={inputStyle}
-            >
-              <option value="">Select category</option>
-              {CATEGORIES.map((cat) => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
-            </select>
-          </div>
-
-          
-          <div>
-            <label style={labelStyle}>
-              Image URL
-            </label>
+            <label style={labelStyle}>Stock *</label>
             <input
-              name="image"
-              value={form.image}
+              type="number"
+              name="stock"
+              value={form.stock}
               onChange={handleChange}
-              placeholder="https://example.com/image.jpg"
               style={inputStyle}
             />
-
-            
-            {form.image ? (
-              <div style={{ marginTop: "12px", border: "1.5px solid #e2e8f0", borderRadius: "12px", overflow: "hidden", height: "160px", background: "#f8fafc", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <img
-                  src={form.image}
-                  alt="preview"
-                  style={{ width: "100%", height: "100%", objectFit: "contain" }}
-                  onError={(e) => e.target.style.display = "none"}
-                />
-              </div>
-            ) : (
-              <div style={{ marginTop: "12px", border: "1.5px dashed #cbd5e1", borderRadius: "12px", height: "120px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "#f8fafc", gap: "8px" }}>
-                <FaImage size={28} color="#94a3b8" />
-                <p style={{ color: "#94a3b8", fontSize: "13px" }}>Image preview will appear here</p>
-              </div>
-            )}
           </div>
+        </div>
 
-         
-          <div>
-            <label style={labelStyle}>
-              Description
-            </label>
-            <textarea
-              name="description"
-              value={form.description}
-              onChange={handleChange}
-              placeholder="Product description..."
-              rows={3}
-              style={{ ...inputStyle, resize: "none" }}
-            />
-          </div>
-
-        
-          <button
-            disabled={loading}
-            style={{
-              background: loading ? "#818cf8" : "#4f46e5",
-              color: "#fff",
-              fontSize: "16px",
-              fontWeight: "700",
-              padding: "16px",
-              borderRadius: "12px",
-              border: "none",
-              cursor: loading ? "not-allowed" : "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "8px",
-              marginTop: "4px",
-            }}
+       
+        <div>
+          <label style={labelStyle}>Category *</label>
+          <select
+            name="category"
+            value={form.category}
+            onChange={handleChange}
+            style={inputStyle}
           >
-            <FaPlus size={14} />
-            {loading ? "Adding Product..." : "Add Product"}
-          </button>
+            <option value="">Select category</option>
+            {CATEGORIES.map((cat) => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </select>
+        </div>
 
-        </form>
-      </div>
+       
+        <div>
+          <label style={labelStyle}>Product Image *</label>
+
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            style={inputStyle}
+          />
+
+          {uploading && (
+            <p style={{ color: "orange", marginTop: "5px" }}>
+              Uploading image...
+            </p>
+          )}
+
+          {form.image && (
+            <div style={{ marginTop: "10px" }}>
+              <img
+                src={form.image}
+                alt="preview"
+                style={{
+                  width: "100%",
+                  height: "180px",
+                  objectFit: "contain",
+                  borderRadius: "10px",
+                  border: "1px solid #ddd",
+                }}
+              />
+            </div>
+          )}
+        </div>
+
+        
+        <div>
+          <label style={labelStyle}>Description</label>
+          <textarea
+            name="description"
+            value={form.description}
+            onChange={handleChange}
+            rows={3}
+            style={inputStyle}
+          />
+        </div>
+
+      
+        <button
+          disabled={loading}
+          style={{
+            background: "#4f46e5",
+            color: "#fff",
+            padding: "14px",
+            borderRadius: "12px",
+            fontWeight: "700",
+            cursor: "pointer",
+          }}
+        >
+          <FaPlus /> {loading ? "Adding..." : "Add Product"}
+        </button>
+
+      </form>
     </div>
   );
 }
